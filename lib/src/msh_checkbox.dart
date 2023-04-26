@@ -26,6 +26,7 @@ class MSHCheckbox extends StatefulWidget {
         this.disabledColor = const Color(0xFFCCCCCC),
     MSHColorConfig? colorConfig,
     this.size = 18,
+    this.padding = EdgeInsets.zero,
     this.duration,
     this.style = MSHCheckboxStyle.stroke,
     required this.onChanged,
@@ -64,6 +65,9 @@ class MSHCheckbox extends StatefulWidget {
 
   /// The height and width of the checkbox.
   final double size;
+
+  /// Adds padding to checkbox to increase hitspace.
+  final EdgeInsets padding;
 
   /// The duration of the animation which plays when [value] changes.
   final Duration? duration;
@@ -144,15 +148,18 @@ class _MSHCheckboxState extends State<MSHCheckbox>
       child: Stack(
         alignment: Alignment.center,
         children: [
-          SizedBox(
-            height: widget.size + _strokeWidth,
-            width: widget.size + _strokeWidth,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: widget.colorConfig.borderColor(state),
-                  width: _strokeWidth,
+          Padding(
+            padding: widget.padding,
+            child: SizedBox(
+              height: widget.size + _strokeWidth,
+              width: widget.size + _strokeWidth,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: widget.colorConfig.borderColor(state),
+                    width: _strokeWidth,
+                  ),
                 ),
               ),
             ),
