@@ -26,7 +26,7 @@ class MSHCheckbox extends StatefulWidget {
         this.disabledColor = const Color(0xFFCCCCCC),
     MSHColorConfig? colorConfig,
     this.size = 18,
-    this.padding = EdgeInsets.zero,
+    this.tapSpacePadding = const EdgeInsets.only(right: 100, top: 60, left: 10),
     this.duration,
     this.style = MSHCheckboxStyle.stroke,
     required this.onChanged,
@@ -67,7 +67,7 @@ class MSHCheckbox extends StatefulWidget {
   final double size;
 
   /// Adds padding to checkbox to increase hitspace.
-  final EdgeInsets padding;
+  final EdgeInsets tapSpacePadding;
 
   /// The duration of the animation which plays when [value] changes.
   final Duration? duration;
@@ -146,37 +146,50 @@ class _MSHCheckboxState extends State<MSHCheckbox>
         }
       },
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topLeft,
         children: [
-          Padding(
-            padding: widget.padding,
-            child: SizedBox(
-              height: widget.size + _strokeWidth,
-              width: widget.size + _strokeWidth,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: widget.colorConfig.borderColor(state),
-                    width: _strokeWidth,
+          Container(
+            color: Colors.transparent,
+            height:
+                widget.size + _strokeWidth + widget.tapSpacePadding.vertical,
+            width:
+                widget.size + _strokeWidth + widget.tapSpacePadding.horizontal,
+          ),
+          Positioned(
+            left: widget.tapSpacePadding.left,
+            top: widget.tapSpacePadding.top,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  height: widget.size + _strokeWidth,
+                  width: widget.size + _strokeWidth,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: widget.colorConfig.borderColor(state),
+                        width: _strokeWidth,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: widget.size,
-              minWidth: widget.size,
-            ),
-            child: MSHCheckboxBase(
-              context: context,
-              style: widget.style,
-              isDisabled: widget.isDisabled,
-              colorConfig: widget.colorConfig,
-              animation: animationController,
-              strokeWidth: _strokeWidth,
-              size: widget.size,
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: widget.size,
+                    minWidth: widget.size,
+                  ),
+                  child: MSHCheckboxBase(
+                    context: context,
+                    style: widget.style,
+                    isDisabled: widget.isDisabled,
+                    colorConfig: widget.colorConfig,
+                    animation: animationController,
+                    strokeWidth: _strokeWidth,
+                    size: widget.size,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
